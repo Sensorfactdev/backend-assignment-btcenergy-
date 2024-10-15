@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "serverless offline start --httpPort=4000 --host 0.0.0.0 --reloadHandler",
+    "dev": "set SLS_DEBUG=* && serverless offline start --httpPort=4000 --host 0.0.0.0 --reloadHandler --noTimeout",
     "compile": "tsc -p . --noEmit",
     "test": "jest",
     "test:watch": "jest --watch --onlyChanged"

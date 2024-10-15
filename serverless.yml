@@ -11,6 +11,8 @@ provider:
   memorySize: 256
   logRetentionInDays: 14
   timeout: 29
+  environment:
+    NODE_OPTIONS: "--enable-source-maps"
 
 plugins:
   - serverless-esbuild
@@ -20,8 +22,9 @@ custom:
   esbuild:
     packager: yarn
     minify: false
-    sourcemap: false
-    target: node16
+    sourcemap: true
+    keepNames: true
+    target: node16 
     watch:
       pattern: ['src/**/*.ts']
 
