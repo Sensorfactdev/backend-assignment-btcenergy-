@@ -35,7 +35,7 @@ export class GetTotalEnergyLastDaysUseCase {
             energyPerDay.set(date, totalEnergy);
         }));
 
-         return energyPerDay;    
+        return energyPerDay;    
     }
 
 }

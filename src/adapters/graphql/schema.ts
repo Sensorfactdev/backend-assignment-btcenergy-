@@ -4,8 +4,6 @@ import { GetEnergyPerTransactionUseCase } from 'application/use-cases/GetEnergyP
 import { GetTotalEnergyLastDaysUseCase } from 'application/use-cases/GetTotalEnergyLastDaysUseCase';
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
 import { GraphQLDate, SchemaComposer } from 'graphql-compose'
-import composeWithJson from 'graphql-compose-json';
-
 
 const schemaComposer = new SchemaComposer()
 
