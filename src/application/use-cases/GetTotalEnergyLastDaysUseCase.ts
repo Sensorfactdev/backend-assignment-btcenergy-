@@ -1,14 +1,12 @@
+import { getTotalBlockEnergy } from "application/utils/energy_calculation";
 import { BlockChainService } from "domain/ports/BlockChainService";
-import { EnergyCalculatorService } from "domain/ports/EnergyCalculatorService";
+import { GetTotalEnergyLastDaysInput } from "domain/ports/GetTotalEnergyLastDaysInput";
 
 const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000; // ms
-
-export class GetTotalEnergyLastDaysUseCase {
-    private readonly energyCalculator: EnergyCalculatorService;
+export class GetTotalEnergyLastDaysUseCase implements GetTotalEnergyLastDaysInput {
     private readonly BlockChainService: BlockChainService;
 
-    constructor(energyCalculator: EnergyCalculatorService, BlockChainService: BlockChainService) {
-        this.energyCalculator = energyCalculator;
+    constructor(BlockChainService: BlockChainService) {
         this.BlockChainService = BlockChainService;
     }
 
@@ -29,7 +27,7 @@ export class GetTotalEnergyLastDaysUseCase {
             const totalEnergy = await Promise.all(blocks.map(async block => {
                 const blockData = await this.BlockChainService.getBlock(block.hash);
                 if(!blockData) return 0.;
-                return this.energyCalculator.getTotalBlockEnergy(blockData);
+                return getTotalBlockEnergy(blockData);
             })).then(energies => energies.reduce((acc, energy) => acc + energy, 0));
 
             energyPerDay.set(date, totalEnergy);

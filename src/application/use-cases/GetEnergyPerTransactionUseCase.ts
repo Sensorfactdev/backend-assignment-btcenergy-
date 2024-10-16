@@ -1,13 +1,11 @@
-import { IBlock } from "domain/models/Block";
+import { getEnergyPerTransaction } from "application/utils/energy_calculation";
 import { BlockChainService } from "domain/ports/BlockChainService";
-import { EnergyCalculatorService } from "domain/ports/EnergyCalculatorService";
+import { GetEnergyPerTransactionInput } from "domain/ports/GetEnergyPerTransactionInput";
 
-export class GetEnergyPerTransactionUseCase {
-    private readonly energyCalculator: EnergyCalculatorService;
+export class GetEnergyPerTransactionUseCase implements GetEnergyPerTransactionInput {
     private readonly blockChainService: BlockChainService;
 
-    constructor(energyCalculator: EnergyCalculatorService, blockChainService: BlockChainService) {
-        this.energyCalculator = energyCalculator;
+    constructor(blockChainService: BlockChainService) {
         this.blockChainService = blockChainService;
     }
 
@@ -18,7 +16,7 @@ export class GetEnergyPerTransactionUseCase {
         if(!block) return energyPerTransaction;
 
         for(const transaction of block.tx){
-            energyPerTransaction.set(transaction.hash, this.energyCalculator.getEnergyPerTransaction(transaction));
+            energyPerTransaction.set(transaction.hash, getEnergyPerTransaction(transaction));
         }
 
        return energyPerTransaction;    

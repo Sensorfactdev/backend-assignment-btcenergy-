@@ -1,4 +1,3 @@
-import { EnergyCalculatorInternalAdapter } from 'adapters/internal/EnergyCalculatorInternalAdapter';
 import { BlockChainRestAdapter } from 'adapters/outbound/BlockChainRestAdapter';
 import { GetEnergyPerTransactionUseCase } from 'application/use-cases/GetEnergyPerTransactionUseCase';
 import { GetTotalEnergyLastDaysUseCase } from 'application/use-cases/GetTotalEnergyLastDaysUseCase';
@@ -8,12 +7,11 @@ import { GraphQLDate, SchemaComposer } from 'graphql-compose'
 const schemaComposer = new SchemaComposer()
 
 // adapters
-const energyCalculator = new EnergyCalculatorInternalAdapter();
 const BlockChainService = new BlockChainRestAdapter();
 
 // use-cases
-const getEnergyPerTransactionUseCase = new GetEnergyPerTransactionUseCase(energyCalculator, BlockChainService);
-const getTotalEnergyLastDaysUseCase = new GetTotalEnergyLastDaysUseCase(energyCalculator, BlockChainService);
+const getEnergyPerTransactionUseCase = new GetEnergyPerTransactionUseCase(BlockChainService);
+const getTotalEnergyLastDaysUseCase = new GetTotalEnergyLastDaysUseCase(BlockChainService);
 
 // Define return types
 const energyPerTransactionType = new GraphQLObjectType({
