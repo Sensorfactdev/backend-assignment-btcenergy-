@@ -10,7 +10,7 @@ provider:
   lambdaHashingVersion: 20201221
   memorySize: 256
   logRetentionInDays: 14
-  timeout: 29
+  timeout: 120
   environment:
     NODE_OPTIONS: "--enable-source-maps"
 
@@ -24,12 +24,13 @@ custom:
     minify: false
     sourcemap: true
     keepNames: true
-    target: node16 
+    target: node16
     watch:
-      pattern: ['src/**/*.ts']
+      pattern: 
+        - 'src/**/*.ts'
 
 functions:
   graphql:
-    handler: src/fn_graphql.handler
+    handler: src/adapters/graphql/graphql.handler
     events:
       - httpApi: '*'
