@@ -1,4 +1,4 @@
-import { getTotalBlockEnergy } from "application/utils/energy_calculation";
+import { getTotalBlockEnergy } from "application/energy_calculation";
 import { BlockChainService } from "domain/ports/BlockChainService";
 import { GetTotalEnergyLastDaysInput } from "domain/ports/GetTotalEnergyLastDaysInput";
 

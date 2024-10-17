@@ -1,4 +1,4 @@
-import { getEnergyPerTransaction } from "application/utils/energy_calculation";
+import { getEnergyPerTransaction } from "application/energy_calculation";
 import { BlockChainService } from "domain/ports/BlockChainService";
 import { GetEnergyPerTransactionInput } from "domain/ports/GetEnergyPerTransactionInput";
 
