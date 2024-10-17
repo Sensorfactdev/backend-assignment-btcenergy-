@@ -15,10 +15,6 @@ const BlockChainService = new BlockChainRestAdapter();
 const getEnergyPerTransactionUseCase = new GetEnergyPerTransactionUseCase(BlockChainService);
 const getTotalEnergyLastDaysUseCase = new GetTotalEnergyLastDaysUseCase(BlockChainService);
 
-// Primary adapters, input
-const getEnergyPerTransactionController = new GetEnergyPerTransactionController(getEnergyPerTransactionUseCase);
-const getTotalEnergyLastDaysController = new GetTotalEnergyLastDaysController(getTotalEnergyLastDaysUseCase);
-
 // Define return types
 const energyPerTransactionType = new GraphQLObjectType({
   name: 'EnergyPerTransaction',
@@ -47,7 +43,7 @@ schemaComposer.Query.addFields({
       blockHash: 'String!'
     }, 
     resolve: async (_, { blockHash } : {blockHash: string}) => {
-      return getEnergyPerTransactionController.handle({blockHash});
+      return getEnergyPerTransactionUseCase.execute(blockHash);
     }
   },
   energyLastDays: {
@@ -56,7 +52,7 @@ schemaComposer.Query.addFields({
       days: { type: GraphQLInt}
     }, 
     resolve: async (_, { days } : {days: number}) => {
-      return getTotalEnergyLastDaysController.handle({days});
+      return getTotalEnergyLastDaysUseCase.execute(days);
     }
   },
 })

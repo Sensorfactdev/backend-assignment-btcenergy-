@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
-import { BlockChainService } from "domain/ports/BlockChainService";
+import { CryptoApiPort } from "domain/ports/CryptoApiService";
 import { IBlock } from "domain/models/Block";
 import { ITransaction } from "domain/models/Transaction";
 import { IHash } from "domain/models/Hash";
 
-export class BlockChainRestAdapter implements BlockChainService {
+export class BlockChainRestAdapter implements CryptoApiPort {
     private readonly baseUrl: string;
 
     constructor() {
