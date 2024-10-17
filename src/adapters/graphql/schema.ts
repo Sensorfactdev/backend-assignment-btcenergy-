@@ -1,8 +1,6 @@
-import { GetEnergyPerTransactionController } from 'adapters/controllers/GetEneryPerTransactionController';
-import { GetTotalEnergyLastDaysController } from 'adapters/controllers/GetTotalEnergyLastDaysController';
-import { BlockChainRestAdapter } from 'adapters/outbound/BlockChainRestAdapter';
-import { GetEnergyPerTransactionUseCase } from 'application/use-cases/GetEnergyPerTransactionUseCase';
-import { GetTotalEnergyLastDaysUseCase } from 'application/use-cases/GetTotalEnergyLastDaysUseCase';
+import { GetEnergyPerTransactionUseCase } from '@application/use-cases/GetEnergyPerTransactionUseCase';
+import { GetTotalEnergyLastDaysUseCase } from '@application/use-cases/GetTotalEnergyLastDaysUseCase';
+import { BlockChainRestAdapter } from '@adapters/outbound/BlockChainRestAdapter';
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
 import { GraphQLDate, SchemaComposer } from 'graphql-compose'
 
@@ -43,7 +41,8 @@ schemaComposer.Query.addFields({
       blockHash: 'String!'
     }, 
     resolve: async (_, { blockHash } : {blockHash: string}) => {
-      return getEnergyPerTransactionUseCase.execute(blockHash);
+      let energyPerTransaction = await getEnergyPerTransactionUseCase.execute(blockHash);
+      return Array.from(energyPerTransaction, ([hash, energy]) => ({ hash, energy }));
     }
   },
   energyLastDays: {
@@ -52,7 +51,8 @@ schemaComposer.Query.addFields({
       days: { type: GraphQLInt}
     }, 
     resolve: async (_, { days } : {days: number}) => {
-      return getTotalEnergyLastDaysUseCase.execute(days);
+      let energyPerDay = await getTotalEnergyLastDaysUseCase.execute(days);
+      return Array.from(energyPerDay, ([date, energy]) => ({ date, energy }));
     }
   },
 })

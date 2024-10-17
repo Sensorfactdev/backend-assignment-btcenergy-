@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import { CryptoApiPort } from "domain/ports/CryptoApiService";
-import { IBlock } from "domain/models/Block";
-import { ITransaction } from "domain/models/Transaction";
-import { IHash } from "domain/models/Hash";
+import { CryptoApiPort } from "@domain/ports/CryptoApiService";
+import { IBlock } from "@domain/models/Block";
+import { ITransaction } from "@domain/models/Transaction";
+import { IHash } from "@domain/models/Hash";
 
 export class BlockChainRestAdapter implements CryptoApiPort {
     private readonly baseUrl: string;
@@ -27,7 +27,14 @@ export class BlockChainRestAdapter implements CryptoApiPort {
 
     async getBlock(hash: string): Promise<IBlock | null> {
         const response = await this.fetchEndpoint(`/rawblock/${hash}`);
-        return response;
+        if (response) {
+            const block: IBlock = {
+                hash: response.hash,
+                transactions: response.tx
+            };
+            return block;
+        }
+        return null;
     }
 
     async getTransaction(hash: string): Promise<ITransaction | null> {

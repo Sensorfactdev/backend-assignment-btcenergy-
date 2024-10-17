@@ -1,9 +1,8 @@
-import { getTotalBlockEnergy } from "application/energy_calculation";
-import { CryptoApiPort } from "domain/ports/CryptoApiService";
-import { GetTotalEnergyLastDaysInput } from "domain/ports/GetTotalEnergyLastDaysInput";
+import { getTotalBlockEnergy } from "@application/energy_calculation";
+import { CryptoApiPort } from "@domain/ports/CryptoApiService";
 
 const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000; // ms
-export class GetTotalEnergyLastDaysUseCase implements GetTotalEnergyLastDaysInput {
+export class GetTotalEnergyLastDaysUseCase {
     private readonly cryptoApi: CryptoApiPort;
 
     constructor(cryptoApi: CryptoApiPort) {
@@ -23,6 +22,7 @@ export class GetTotalEnergyLastDaysUseCase implements GetTotalEnergyLastDaysInpu
         // TODO: Although this is run concurrently, it still is slow, this can be optimized
         // - Workers
         // - At caching to calls from BlockChainService
+        // - Asynchronously processing with polling
         await Promise.all(dates.map(async date => {
             const blocks = await this.cryptoApi.getBlocksByDate(date);
             if(!blocks) return;

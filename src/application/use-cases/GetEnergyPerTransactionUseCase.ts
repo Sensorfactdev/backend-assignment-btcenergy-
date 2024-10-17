@@ -1,5 +1,5 @@
-import { getEnergyPerTransaction } from "application/energy_calculation";
-import { CryptoApiPort } from "domain/ports/CryptoApiService";
+import { getEnergyPerTransaction } from "@application/energy_calculation";
+import { CryptoApiPort } from "@domain/ports/CryptoApiService";
 
 export class GetEnergyPerTransactionUseCase {
     private readonly cryptoApi: CryptoApiPort;
@@ -14,7 +14,7 @@ export class GetEnergyPerTransactionUseCase {
         const block = await this.cryptoApi.getBlock(blockHash);
         if(!block) return energyPerTransaction;
 
-        for(const transaction of block.tx){
+        for(const transaction of block.transactions){
             energyPerTransaction.set(transaction.hash, getEnergyPerTransaction(transaction));
         }
 

@@ -15,8 +15,13 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "baseUrl": "./src",
+    "paths": {
+      "@application/*": ["application/*"],
+      "@domain/*": ["domain/*"],
+      "@adapters/*": ["adapters/*"]
+    },
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/**/*.spec.ts", "src/**/*.test.ts"
   ]
 }
