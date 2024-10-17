@@ -1,3 +1,5 @@
+import { GetEnergyPerTransactionController } from 'adapters/controllers/GetEneryPerTransactionController';
+import { GetTotalEnergyLastDaysController } from 'adapters/controllers/GetTotalEnergyLastDaysController';
 import { BlockChainRestAdapter } from 'adapters/outbound/BlockChainRestAdapter';
 import { GetEnergyPerTransactionUseCase } from 'application/use-cases/GetEnergyPerTransactionUseCase';
 import { GetTotalEnergyLastDaysUseCase } from 'application/use-cases/GetTotalEnergyLastDaysUseCase';
@@ -6,12 +8,16 @@ import { GraphQLDate, SchemaComposer } from 'graphql-compose'
 
 const schemaComposer = new SchemaComposer()
 
-// adapters
+// Secondary adapters, output
 const BlockChainService = new BlockChainRestAdapter();
 
-// use-cases
+// Use-cases
 const getEnergyPerTransactionUseCase = new GetEnergyPerTransactionUseCase(BlockChainService);
 const getTotalEnergyLastDaysUseCase = new GetTotalEnergyLastDaysUseCase(BlockChainService);
+
+// Primary adapters, input
+const getEnergyPerTransactionController = new GetEnergyPerTransactionController(getEnergyPerTransactionUseCase);
+const getTotalEnergyLastDaysController = new GetTotalEnergyLastDaysController(getTotalEnergyLastDaysUseCase);
 
 // Define return types
 const energyPerTransactionType = new GraphQLObjectType({
@@ -41,9 +47,7 @@ schemaComposer.Query.addFields({
       blockHash: 'String!'
     }, 
     resolve: async (_, { blockHash } : {blockHash: string}) => {
-      let map = await getEnergyPerTransactionUseCase.execute(blockHash);
-      let results = Array.from(map.entries()).map(([hash, energy]) => ({hash,energy}));
-      return results;
+      return getEnergyPerTransactionController.handle({blockHash});
     }
   },
   energyLastDays: {
@@ -52,9 +56,7 @@ schemaComposer.Query.addFields({
       days: { type: GraphQLInt}
     }, 
     resolve: async (_, { days } : {days: number}) => {
-      let map = await getTotalEnergyLastDaysUseCase.execute(days);
-      let results = Array.from(map.entries()).map(([date, energy]) => ({date,energy}));
-      return results;
+      return getTotalEnergyLastDaysController.handle({days});
     }
   },
 })

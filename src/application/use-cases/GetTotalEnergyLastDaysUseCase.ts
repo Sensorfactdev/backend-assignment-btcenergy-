@@ -20,7 +20,9 @@ export class GetTotalEnergyLastDaysUseCase implements GetTotalEnergyLastDaysInpu
             dates.push(day);
         }
 
-        // TODO: Although this is run concurrently, it still is slow, time wise we leave it out of scope
+        // TODO: Although this is run concurrently, it still is slow, this can be optimized
+        // - Workers
+        // - At caching to calls from BlockChainService
         await Promise.all(dates.map(async date => {
             const blocks = await this.BlockChainService.getBlocksByDate(date);
             if(!blocks) return;
