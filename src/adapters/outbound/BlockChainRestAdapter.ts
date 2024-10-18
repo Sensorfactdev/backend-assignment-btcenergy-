@@ -1,16 +1,25 @@
 import fetch from 'node-fetch';
-import { CryptoApiPort } from "@domain/ports/CryptoApiService";
+import { CryptoApiService } from "@domain/ports/CryptoApiService";
 import { IBlock } from "@domain/models/Block";
 import { ITransaction } from "@domain/models/Transaction";
 import { IHash } from "@domain/models/Hash";
 
-export class BlockChainRestAdapter implements CryptoApiPort {
+/**
+ * The BlockChainRestAdapter class is an adapter for the BlockChain API
+ */
+export class BlockChainRestAdapter implements CryptoApiService {
     private readonly baseUrl: string;
 
     constructor() {
          this.baseUrl = 'https://blockchain.info';
     }
 
+    /**
+     * Main method to actually fetch data from the API
+     * 
+     * @param pathQuery - The path and query to fetch (e.g. /path/to/resource?query=1)
+     * @returns Response from the API
+     */
     async fetchEndpoint(pathQuery: string): Promise<any> {
         try {
             const fetchUrl = `${this.baseUrl}${pathQuery}`;
@@ -25,6 +34,12 @@ export class BlockChainRestAdapter implements CryptoApiPort {
         }
     }
 
+    /**
+     * Get block data corresponding to the block hash
+     * 
+     * @param hash - The hash of the block
+     * @returns API block data
+     */
     async getBlock(hash: string): Promise<IBlock | null> {
         const response = await this.fetchEndpoint(`/rawblock/${hash}`);
         if (response) {
@@ -37,11 +52,23 @@ export class BlockChainRestAdapter implements CryptoApiPort {
         return null;
     }
 
+    /**
+     * Get transaction data corresponding to the transaction hash
+     * 
+     * @param hash - The hash of the transaction
+     * @returns API transaction data
+     */
     async getTransaction(hash: string): Promise<ITransaction | null> {
         const response = await this.fetchEndpoint(`/rawtx/${hash}`);
         return response;
     }
 
+    /**
+     * Get all the block hashes mined on a specific date
+     * 
+     * @param date The date to get the blocks from (time part is ignored)
+     * @returns List of block hashes
+     */
     async getBlocksByDate(date: Date): Promise<IHash[] | null> {
         const timeMilliseconds = date.getTime();
         const response = await this.fetchEndpoint(`/blocks/${timeMilliseconds}?format=json`);

@@ -1,14 +1,26 @@
 import { getTotalBlockEnergy } from "@application/energy_calculation";
-import { CryptoApiPort } from "@domain/ports/CryptoApiService";
+import { CryptoApiService } from "@domain/ports/CryptoApiService";
 
 const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000; // ms
-export class GetTotalEnergyLastDaysUseCase {
-    private readonly cryptoApi: CryptoApiPort;
 
-    constructor(cryptoApi: CryptoApiPort) {
+
+/**
+ * Use case to calculate the total energy of the last days from today
+ * @constructor cryptoApi - The crypto API port to retrieve blocks data
+ */
+export class GetTotalEnergyLastDaysUseCase {
+    private readonly cryptoApi: CryptoApiService;
+
+    constructor(cryptoApi: CryptoApiService) {
         this.cryptoApi = cryptoApi;
     }
 
+    /**
+     * Returns the total energy of the last days from today
+     *
+     * @param days - The number of days from today
+     * @returns A map with energy per day
+     */
     async execute(days: number): Promise<Map<Date, number>> {
         let energyPerDay = new Map<Date, number>();
 

@@ -31,6 +31,8 @@ export const graphqlApi = /*#__PURE__*/ <TContext>(
 
     const { query, variables, operationName } = getGraphQLParameters(request)
 
+    // Add authentication
+
     const result = await processRequest({
       schema,
       query,

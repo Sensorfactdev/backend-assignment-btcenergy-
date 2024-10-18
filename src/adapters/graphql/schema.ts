@@ -30,6 +30,7 @@ const energyLastDays = new GraphQLObjectType({
   }
 });
 
+// Define queries
 schemaComposer.Query.addFields({
   hello: {
     type: 'String!',

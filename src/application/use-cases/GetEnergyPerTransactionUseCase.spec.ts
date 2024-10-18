@@ -1,9 +1,8 @@
-import { CryptoApiPort } from "@domain/ports/CryptoApiService";
+import { CryptoApiService } from "@domain/ports/CryptoApiService";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { IBlock } from "@domain/models/Block";
 import { ITransaction } from "@domain/models/Transaction";
 import { GetEnergyPerTransactionUseCase } from "./GetEnergyPerTransactionUseCase";
-// import { getEnergyPerTransaction } from "@application/energy_calculation";
  
 // Mock transactions
 const transaction1: ITransaction = { hash: "transaction1", size: 10 };
@@ -14,7 +13,7 @@ const block1: IBlock = { hash: "block1", transactions: [transaction1, transactio
 const block2: IBlock = { hash: "block2", transactions: [] };
 
 // Mock implementation of CryptoApiPort
-const mockCryptoApiPort: jest.Mocked<CryptoApiPort> = {
+const mockCryptoApiPort: jest.Mocked<CryptoApiService> = {
     getBlock: jest.fn((hash: string) => {
         if(hash === "block1") return Promise.resolve(block1);
         if(hash === "block2") return Promise.resolve(block2);
@@ -37,7 +36,7 @@ jest.mock("@application/energy_calculation", () => ({
     getEnergyPerTransaction: jest.fn((transaction : ITransaction) => transaction.size * MOCK_ENERGY_COST_PER_BYTE),
 }));
 
-
+// Tests
 describe("GetEnergyPerTransactionUseCase", () => {
     let useCase: GetEnergyPerTransactionUseCase;
 
